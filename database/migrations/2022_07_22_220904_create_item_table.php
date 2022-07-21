@@ -17,6 +17,8 @@ class CreateItemTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->integer('qty');
+            $table->foreignId('shops_id')->constrained();
+            $table->foreignId('departments_id')->constrained();
             $table->timestamps();
         });
     }

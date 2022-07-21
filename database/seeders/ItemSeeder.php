@@ -18,18 +18,24 @@ class ItemSeeder extends Seeder
             [
                 'name' => 'Bread (Tiger)',
                 'qty' => rand(1, 5),
+                'shops_id' => 1,
+                'departments_id' => 3,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'Milk (2 Pints)',
                 'qty' => rand(1, 5),
+                'shops_id' => 2,
+                'departments_id' => 4,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'Cheese (Red Leicester)',
                 'qty' => rand(1, 5),
+                'shops_id' => 2,
+                'departments_id' => 4,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]
