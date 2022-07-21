@@ -39,7 +39,7 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|regex:/^[a-bA-B0-9 ]+$/',
+            'name' => 'required',
             'qty' => 'required|gt:0',
             'shop' => 'required| gt:0',
         ]);
