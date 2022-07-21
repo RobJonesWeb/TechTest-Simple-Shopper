@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Item;
+use App\Models\Shop;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -21,9 +23,11 @@ class ItemController extends Controller
     public function index(): View
     {
 
-        $items = Item::all();
+        $items = Item::query()->orderBy('shops_id')->orderBy('departments_id')->get();
+        $departments = Department::all();
+        $shops = Shop::all();
 
-        return view('welcome')->with('items', $items);
+        return view('welcome', compact('items', 'departments', 'shops'));
     }
 
     /**
@@ -35,13 +39,16 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:items',
-            'qty' => 'required|gt:0'
+            'name' => 'required|regex:/^[a-bA-B0-9 ]+$/',
+            'qty' => 'required|gt:0',
+            'shop' => 'required| gt:0',
         ]);
 
             $item = new Item();
-            $item->name = $request->name;
-            $item->qty = $request->qty;
+            $item->name = $request->name ?? '';
+            $item->qty = $request->qty ?? -1;
+            $item->shops_id = $request->shop ?? -1;
+            $item->departments_id = $request->department ?? '-1';
             $item->save();
             return back()->with('message', "{$item->name} has been added to your shopping list")->withInput();
     }

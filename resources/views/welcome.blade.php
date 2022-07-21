@@ -13,6 +13,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <style>
         body {
             color: #3A3B3C;
@@ -29,6 +31,15 @@
 
         a:hover {
             text-decoration: underline;
+        }
+
+        .select2-selection__arrow b {
+            top: 70%!important;
+            left: 30%!important;
+        }
+
+        .select2-selection--single {
+            border: none!important;
         }
     </style>
 
@@ -50,11 +61,13 @@
             integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 <body>
 <div class="container py-5">
-    <header class="row mb-5 text-center">
+    <header class="row text-center">
         <h1>Simple Shopper</h1>
     </header>
     @if(isset($message))
@@ -72,37 +85,71 @@
             </ul>
         </div>
     @endif
-    <main class="row">
-        <article class="offset-md-1 col-md-4">
-            <form method="post" action="{{ route('addItem') }}" id="shopping-list">
+    <main class="row justify-content-center">
+        <article class="col-md-12">
+            <form method="post" action="{{ route('addItem') }}" class="pb-4" id="shopping-list">
                 @csrf
                 <fieldset>
-                    <legend>Add New Item:</legend>
-                    <label class="pe-3" for="item">Item</label>
-                    <input type="text" class="form-control" id="item" name="name"/>
-                    <label class="pe-3" for="qty">Quantity</label>
-                    <input type="number" class="form-control" id="qty" name="qty"/>
-                    <input type="submit" class="form-control  mt-2 bg-primary text-white" value="submit">
+                    <legend class="text-center text-md-start">Add New Item:</legend>
+                    <div class="row py-1">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control col-md-6" id="item" name="name"
+                                   placeholder="Bread/Milk/Eggs" required/>
+                        </div>
+                        <div class="col-md-2">
+                        <input type="number" class="form-control col-md-6" id="qty" name="qty"
+                                   placeholder="0" required/>
+                        </div>
+                        <div class="col-md-3">
+                        <select class="form-control col-md-6 select2" name="shop" id="shop" required>
+                                <option value="option_select" disabled selected>Choose a shop...</option>
+                                @foreach($shops as $shop)
+                                    <option value="{{ $shop->id }}">{{ $shop->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                        <select class="form-control col-md-6 select2" name="department" id="department" required>
+                                <option value="0" disabled selected>Choose a department...</option>
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="offset-md-4 col-md-4">
+                        <input type="submit" class="form-control mt-2 bg-primary text-white" value="submit">
+                    </div>
                 </fieldset>
             </form>
         </article>
-        <article class="offset-md-1 col-md-4">
+        <article class="col-md-12">
             <h4 class="py-4 pt-md-2 text-center">Current Shopping List:</h4>
             <div class="row mb-2">
-                <div class="col-6">Item</div>
-                <div class="col-3">Qty</div>
-                <div class="col-3">Action</div>
+                <div class="col-3 col-md-2">Store</div>
+                <div class="col-3 col-md-2">Aisle</div>
+                <div class="col-3 col-md-6">Item/Qty</div>
+                <div class="col-3 col-md-2">Action</div>
             </div>
-            @foreach($items as $item)
-                <div class="row bg-white p-2 align-items-center">
-                    <div class="col-6">{{$item->name}}</div>
-                    <div class="col-3">{{$item->qty}}</div>
-                    <form class="col-3" action="{{ url('/delete', ['id' => $item->id]) }}" method="post">
-                        <input class="btn btn-danger" type="submit" value="Delete"/>
-                        <input type="hidden" name="_method" value="delete"/>
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    </form>
-                </div>
+            @foreach($shops as $shop)
+                @foreach($departments as $department)
+                    @if($departmentName = $department->id == -1 ? 'Miscellaneous' : $department->name)
+                    @endif
+                    @foreach($items as $item)
+                        @if($shop->id === $item->shops_id && $department->id === $item->departments_id)
+                            <div class="row bg-white py-2 align-items-center border border-bottom">
+                                <div class="col-3 col-md-2">{{$shop->name}}</div>
+                                <div class="col-3 col-md-2">{{$departmentName}}</div>
+                                <div class="col-3 col-md-6">{{$item->name}} x {{$item->qty}}</div>
+                                <form class="col-3 col-md-2" action="{{ url('/delete', ['id' => $item->id]) }}" method="post">
+                                    <img src="/bin.svg" class="btn btn-danger" alt="Delete Icon">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                </form>
+                            </div>
+                        @endif
+                    @endforeach
+                @endforeach
             @endforeach
         </article>
     </main>
