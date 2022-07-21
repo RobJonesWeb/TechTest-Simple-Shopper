@@ -13,7 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
     <style>
         body {
@@ -34,12 +34,16 @@
         }
 
         .select2-selection__arrow b {
-            top: 70%!important;
-            left: 30%!important;
+            top: 70% !important;
+            left: 30% !important;
         }
 
         .select2-selection--single {
-            border: none!important;
+            border: none !important;
+        }
+
+        .deleteItem {
+            color: #ffffff;
         }
     </style>
 
@@ -97,11 +101,11 @@
                                    placeholder="Bread/Milk/Eggs" required/>
                         </div>
                         <div class="col-md-2">
-                        <input type="number" class="form-control col-md-6" id="qty" name="qty"
+                            <input type="number" class="form-control col-md-6" id="qty" name="qty"
                                    placeholder="0" required/>
                         </div>
                         <div class="col-md-3">
-                        <select class="form-control col-md-6 select2" name="shop" id="shop" required>
+                            <select class="form-control col-md-6 select2" name="shop" id="shop" required>
                                 <option value="option_select" disabled selected>Choose a shop...</option>
                                 @foreach($shops as $shop)
                                     <option value="{{ $shop->id }}">{{ $shop->name}}</option>
@@ -109,7 +113,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                        <select class="form-control col-md-6 select2" name="department" id="department" required>
+                            <select class="form-control col-md-6 select2" name="department" id="department" required>
                                 <option value="0" disabled selected>Choose a department...</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->name}}</option>
@@ -141,8 +145,9 @@
                                 <div class="col-3 col-md-2">{{$shop->name}}</div>
                                 <div class="col-3 col-md-2">{{$departmentName}}</div>
                                 <div class="col-3 col-md-6">{{$item->name}} x {{$item->qty}}</div>
-                                <form class="col-3 col-md-2" action="{{ url('/delete', ['id' => $item->id]) }}" method="post">
-                                    <img src="/bin.svg" class="btn btn-danger" alt="Delete Icon">
+                                <form class="col-3 col-md-2" action="{{ url('/delete', ['id' => $item->id]) }}"
+                                      method="post">
+                                    <input type="image" src="/bin.svg" class="btn btn-danger deleteItem" alt="Submit">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 </form>
