@@ -94,7 +94,7 @@
                 <div class="col-3">Action</div>
             </div>
             @foreach($items as $item)
-                <div class="row mb-2 bg-white p-2 align-items-center">
+                <div class="row bg-white p-2 align-items-center">
                     <div class="col-6">{{$item->name}}</div>
                     <div class="col-3">{{$item->qty}}</div>
                     <form class="col-3" action="{{ url('/delete', ['id' => $item->id]) }}" method="post">
