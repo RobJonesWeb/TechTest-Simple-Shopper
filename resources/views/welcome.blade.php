@@ -15,8 +15,20 @@
 
     <style>
         body {
+            color: #3A3B3C;
             background: #DBE9F4;
             font-family: 'Nunito', Arial, sans-serif;
+        }
+
+        a:link,
+        a:visited,
+        a:active {
+            color: #a3a3a3;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 
@@ -42,7 +54,7 @@
 </head>
 <body>
 <div class="container py-5">
-    <header class="row mb-5">
+    <header class="row mb-5 text-center">
         <h1>Simple Shopper</h1>
     </header>
     @if(isset($message))
@@ -61,7 +73,7 @@
         </div>
     @endif
     <main class="row">
-        <article class="col-md-4">
+        <article class="offset-md-1 col-md-4">
             <form method="post" action="{{ route('addItem') }}" id="shopping-list">
                 @csrf
                 <fieldset>
@@ -74,21 +86,27 @@
                 </fieldset>
             </form>
         </article>
-        <article class="col-md-4">
+        <article class="offset-md-1 col-md-4">
             <h4 class="py-4 pt-md-2 text-center">Current Shopping List:</h4>
+            <div class="row mb-2">
+                <div class="col-6">Item</div>
+                <div class="col-3">Qty</div>
+                <div class="col-3">Action</div>
+            </div>
             @foreach($items as $item)
-                <div class="row mb-2">
+                <div class="row mb-2 bg-white p-2 align-items-center">
                     <div class="col-6">{{$item->name}}</div>
                     <div class="col-3">{{$item->qty}}</div>
                     <form class="col-3" action="{{ url('/delete', ['id' => $item->id]) }}" method="post">
-                        <input class="btn btn-danger" type="submit" value="Delete" />
-                        <input type="hidden" name="_method" value="delete" />
+                        <input class="btn btn-danger" type="submit" value="Delete"/>
+                        <input type="hidden" name="_method" value="delete"/>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     </form>
                 </div>
             @endforeach
         </article>
     </main>
+    @include('includes.footer')
 </div>
 </body>
 </html>
