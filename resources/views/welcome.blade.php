@@ -74,6 +74,16 @@
     <header class="row text-center">
         <h1>Simple Shopper</h1>
     </header>
+    <article class="row text-md-start text-center scenario bg-white text-dark border border-dark rounded p-2">
+        <p class="col-12 m-0">
+            <span class="fw-bold">Scenario: </span> Create a Laravel application that allows you to show, create and delete items from a
+shopping list. The project should include a MySql database to store data. There should be a
+single html page which shows all items currently on the list, with features to add new items
+and remove items. The project should include both front-end and back-end elements.
+We should be able to store a quantity for each item on the list.
+Once complete, upload to a public GitHub repository and provide the link.
+        </p>
+    </article>
     @if(isset($message))
         <div class="alert alert-primary">{{$message}}</div>
     @endif
